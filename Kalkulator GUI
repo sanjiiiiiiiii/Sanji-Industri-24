@@ -1,0 +1,97 @@
+# Nama: Ni Putu Sri Sanjiwani
+# NIM: F1F02410011
+# Tgl: 7 April 2025
+
+import tkinter as tk 
+
+# Fungsi untuk menampilkan angka pada layar kalkulator 
+def button_click(value):
+    current = entry.get()
+    entry.delete(0, tk.END)
+    entry.insert(0, current + str(value))
+
+# Fungsi untuk hapus semua
+def button_clear():
+    entry.delete(0, tk.END)
+
+# Fungsi untuk hapus 1 karakter terakhir
+def button_delete():
+    current = entry.get()
+    entry.delete(0, tk.END)
+    entry.insert(0, current[:-1])
+
+# Fungsi mengubah angka menjadi negatif/positif
+def button_mines():
+    current = entry.get()
+    if current:
+        if current.startswith('-'):
+            entry.delete(0, tk.END)
+            entry.insert(0, current[1:])
+        else:
+            entry.delete(0, tk.END)
+            entry.insert(0, '-' + current)
+
+# Fungsi menghitung hasil
+def button_equal():
+    try:
+        expression = entry.get()
+        if '%' in expression:
+            expression = expression.replace('%', '/100')
+        result = eval (expression)
+        entry.delete(0, tk.END)
+        entry.insert(0, str(result))
+    except Exception as e:
+        entry.delete(0, tk.END)
+        entry.insert(0, "Error")
+
+# Membuat jendela utama 
+window = tk.Tk()
+window.title("Kalkulator")
+
+# Membuat entry widget untuk menampilkan hasil
+entry = tk.Entry(window, width=16, font=('Arial', 24, 'bold'), borderwidth=2, relief='solid', justify='right')
+entry.grid(row=0, column=0, columnspan=4, padx=5, pady=5)
+
+#Tombol angka 
+buttons = [
+    'C', '%', '±', '*',
+    '7', '8', '9', '/',
+    '4', '5', '6', '+',
+    '1', '2', '3', '-',
+    'DEL', '0', '.', '='
+]
+
+#Warna tombol
+button_bg = '#D7BFDC'
+button_fg = 'black'
+special_bg = '#B47EDE'
+
+# Menambahkan tombol ke dalam grid 
+row = 1
+col = 0
+
+for val in buttons:
+    if val == '=':
+        btn = tk.Button(window, text=val, width=5, height=2, 
+                            font=('Arial', 18, 'bold'), bg=special_bg, fg=button_fg, command=button_equal)
+    elif val == 'C':
+            btn = tk.Button(window, text=val, width=5, height=2, 
+                            font=('Arial', 18, 'bold'), bg=button_bg, fg=button_fg, command=button_clear)
+    elif val == 'DEL':
+            btn = tk.Button(window, text=val, width=5, height=2, 
+                             font=('Arial', 18, 'bold'), bg=button_bg, fg=button_fg, command=button_delete)
+    elif val == '±':
+            btn = tk.Button(window, text=val, width=5, height=2, 
+                            font=('Arial', 18, 'bold'), bg=button_bg, fg=button_fg, command=button_mines)
+    else:
+         btn = tk.Button(window, text=val, width=5, height=2, 
+                            font=('Arial', 18, 'bold'), bg=button_bg, fg=button_fg, command=lambda v=val: button_click(v))
+
+    btn.grid(row=row, column=col, padx=1, pady=1)
+    col += 1 
+    if col > 3:
+        col = 0
+        row += 1
+
+# Menjalankan aplikasi GUI
+window.mainloop()
